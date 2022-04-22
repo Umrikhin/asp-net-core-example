@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @*decription*@
+    @*https://geeksarray.com/blog/jquery-ajax-autocomplete-in-asp-net-mvc-core*@
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#tags").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/Home/Find',
+                        data: { "frarment": request.term },
+                        dataType: "json",
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return item;
+                            }))
+                        }
+                    });
+                },
+                minLength: 2
+            });
+        });
+    </script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <h1>Search</h1>
+            <form asp-action="Search" method="post">
+                <div>
+                    <div class="form-group">
+                        <label class="control-label">the name of the medical institution to search for</label>
+                        <input type="text" name="search" id="tags" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Find data" class="btn btn-primary" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

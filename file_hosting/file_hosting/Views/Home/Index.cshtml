@@ -1,0 +1,91 @@
+﻿@using file_hosting.Models
+@model List<file_hosting.Models.FileUpload>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+    <title>Files</title>
+    <style type="text/css">
+        /* Styles for validation helpers*/
+        .field-validation-error {
+            color: #ff0000;
+        }
+
+        .field-validation-valid {
+            display: none;
+        }
+
+        .input-validation-error {
+            border: 1px solid #ff0000 !important;
+            background-color: #ffeeee !important;
+        }
+
+        .validation-summary-errors {
+            font-weight: bold !important;
+            color: #ff0000 !important;
+        }
+
+        .validation-summary-valid {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="m-1 p-1">
+        <h4>Select file to upload</h4>
+        <form asp-action="AddFile" asp-controller="Home" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-group">
+                <input class="form-control-file" type="file" name="uploadedFile" accept="image/*" id="choose-file" /><br>
+            </div>
+            <br />
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </div>
+        </form>
+        <hr />
+        <h2>list of files</h2>
+        <table class="table table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>№</th>
+                    <th>File Name</th>
+                    <th>Size, Kb</th>
+                    <th>Change</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int i = 1; }
+                @foreach (file_hosting.Models.FileUpload file in Model)
+                {
+                    <tr>
+                        <td>@i<a name="go-item-@file.FileName"></a></td>
+                        <td><a href="download-file/@file.FileName">@file.FileName</a></td>
+                        <td>@Utils.ToKb(file.Size)</td>
+                        <td>@file.DateLoad.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                        <td>
+                            <form method="post">
+                                <input type="hidden" name="FileName" value="@file.FileName" />
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this file?'); " formaction="/Home/RemoveFile">
+                                    Remove
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    i += 1;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-end">Total:</td>
+                    <td class="text-start">
+                        @Model.Count().ToString()
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</body>
+</html>

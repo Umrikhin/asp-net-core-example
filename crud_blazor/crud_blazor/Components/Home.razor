@@ -1,0 +1,122 @@
+﻿@using crud_blazor.Models
+@using crud_blazor.Infractructure
+@using Microsoft.AspNetCore.Components.Web
+
+@inject IPerson p
+
+    <style type="text/css">
+        .field-error {
+            color: red;
+            font-weight: bold;
+        }
+        .text_box
+        {
+            width:250px;
+        }
+        .add_block {
+            padding:10px;
+        }
+    </style>
+
+    <div class="m-1 p-1">
+        <span class="field-error">@err</span>
+        <div class="d-flex add_block">
+            <input type="text" @bind-value="@new_person.Famip" placeholder="Внесите фамилию" class="form-control text_box" />&nbsp
+            <input type="text" @bind-value="@new_person.Namep" placeholder="Внесите имя" class="form-control text_box" />&nbsp
+            <input type="text" @bind-value="@new_person.Otchp" placeholder="Внесите отчество" class="form-control text_box" />&nbsp
+            <input type="date" @bind-value="@new_person.Dr" placeholder="Внесите дату рождения" min="1900-01-01" class="form-control text_box" />&nbsp
+            <button @onclick="AddNewPerson" class="btn btn-primary">Добавить запись</button>
+        </div>
+            <table class="table table-bordered">
+                <thead class="table-primary">
+                    <tr>
+                        <td>Фамилия</td>
+                        <td>Имя</td>
+                        <td>Отчество</td>
+                        <td>Рожден</td>
+                        <td>Действия</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int i = 0; }
+                    @foreach (Person val in p.Get(string.Empty))
+                    {
+                        i += 1;
+                        if (val.Id == edit_row)
+                        {
+                            edt_person = val;
+                            <tr>
+                                <td><input type="text" @bind-value="@edt_person.Famip" placeholder="Внесите фамилию" class="form-control" /></td>
+                                <td><input type="text" @bind-value="@edt_person.Namep" placeholder="Внесите имя" class="form-control" /></td>
+                                <td><input type="text" @bind-value="@edt_person.Otchp" placeholder="Внесите отчество" class="form-control" /></td>
+                                <td><input type="date" @bind-value="@edt_person.Dr" placeholder="Внесите дату рождения" min="1900-01-01" class="form-control" /></td>
+                                <td class="align-middle"><button @onclick="EdtPerson" class="btn btn-sm btn-warning shadow-none">Обновить</button>&nbsp<button @onclick="@(() => CancelEditRow())" class="btn btn-sm btn-info shadow-none">Отмена</button></td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@val.Famip</td>
+                                <td>@val.Namep</td>
+                                <td>@val.Otchp</td>
+                                <td>@val.Dr.ToString("dd.MM.yyyy")</td>
+                                <td class="align-middle"><button @onclick="@(() => SetEditRow(val.Id))" class="btn btn-sm btn-info shadow-none">Изменить</button>&nbsp<button @onclick="@(() => DelRow(val))" class="btn btn-sm btn-danger shadow-none">Удалить</button></td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+    </div>
+
+    @code {
+
+        Person new_person = new Person() { Dr = DateTime.Now.Date };
+        Person edt_person = new Person();
+
+        string err = string.Empty;
+
+        int edit_row = -1;
+
+        private void AddNewPerson()
+        {
+            err = string.Empty;
+            if (string.IsNullOrEmpty(new_person.Famip) || string.IsNullOrEmpty(new_person.Namep) || string.IsNullOrEmpty(new_person.Otchp))
+            {
+                err = "Внесите обязательные данные";
+                return;
+            }
+            p.Add(new_person);
+            new_person = new Person() { Dr = DateTime.Now.Date };
+        }
+
+        private void EdtPerson()
+        {
+            err = string.Empty;
+            if (string.IsNullOrEmpty(edt_person.Famip) || string.IsNullOrEmpty(edt_person.Namep) || string.IsNullOrEmpty(edt_person.Otchp))
+            {
+                err = "Внесите обязательные данные";
+                return;
+            }
+            p.Edit(edt_person);
+            edit_row = -1;
+        }
+
+        private void SetEditRow(int row)
+        {
+            err = string.Empty;
+            edit_row = row;
+        }
+
+        private void DelRow(Person row)
+        {
+            err = string.Empty;
+            p.Del(row);
+        }
+
+        private void CancelEditRow()
+        {
+            err = string.Empty;
+            edit_row = -1;
+        }
+
+    }

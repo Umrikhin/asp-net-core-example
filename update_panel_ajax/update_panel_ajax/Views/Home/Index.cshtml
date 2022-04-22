@@ -1,0 +1,120 @@
+﻿@model update_panel_ajax.Models.Person
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css" />
+    <title>Send Data</title>
+
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+            margin: 0;
+            padding: 50px;
+        }
+
+        input[type=text], select {
+            width: 150px;
+        }
+
+        .modal {
+            position: fixed;
+            z-index: 999;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            background-color: Black;
+            filter: alpha(opacity=60);
+            opacity: 0.6;
+            -moz-opacity: 0.8;
+            display: none;
+        }
+
+        .center {
+            z-index: 1000;
+            margin: 50px auto;
+            padding: 10px;
+            width: 150px;
+            height: 150px;
+            background-color: White;
+            border-radius: 10px;
+            filter: alpha(opacity=100);
+            opacity: 1;
+            -moz-opacity: 1;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        .center img {
+            height: 120px;
+            width: 120px;
+        }
+    </style>
+
+    <script src="~/jquery/dist/jquery.min.js"></script>
+    <script src="~/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.min.js"></script>
+
+</head>
+<body>
+    <div>
+        <form asp-action="SendData" asp-controller="Home"
+              data-ajax="true" data-ajax-method="POST"
+              data-ajax-begin="OnBegin" data-ajax-failure="OnFailure"
+              data-ajax-success="OnSuccess" data-ajax-complete="OnComplete">
+            <div class="container">
+                <h2>Fill out the form to send data</h2>
+                <table class="table table-condensed">
+                    <tr>
+                        <td>First Name:</td>
+                        <td><input type="text" asp-for="FirstName" class="form-control" /></td>
+                    </tr>
+                    <tr>
+                        <td>Country:</td>
+                        <td><input type="text" asp-for="Country" class="form-control" /></td>
+                    </tr>
+                    <tr>
+                        <td>Test Error:</td>
+                        <td>
+                            <select class="form-control" asp-for="TestError">
+                                <option value="0">Process without errors</option>
+                                <option value="1">Emulate error</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><input type="submit" value="Send My Data" class="btn btn-primary" /></td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>
+
+    <div id="progress" class="modal">
+        <div class="center">
+            <img src="~/images/Loader.gif" />
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function OnBegin() {
+            $("#progress").show();
+        }
+
+        function OnFailure(response) {
+            alert("An error has occurred.");
+        }
+
+        function OnSuccess(response) {
+            var message = "First Name: " + response.firstName;
+            message += "\nCountry: " + response.country;
+            alert(message);
+        }
+
+        function OnComplete() {
+            $("#progress").hide();
+        }
+    </script>
+</body>
+</html>

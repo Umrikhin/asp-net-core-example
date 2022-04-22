@@ -1,0 +1,50 @@
+﻿@using table_sort.Infrastructure
+@model List<table_sort.Models.Person>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
+    <title>Persons</title>
+</head>
+<body>
+    <div class="m-1 p-1">
+        <h2>List of Persons</h2>
+        <table class="table table-bordered">
+            <thead class="table-primary">
+                <tr>
+                <th>№</th>
+                <th><a asp-action="Index" asp-controller="Home" asp-route-sort=@($"first_name{ViewBag.NewSort}")>First Name @Html.Raw(Utils.GetSimbolSort("first_name", ViewBag.Sort))</a></th>
+                <th><a asp-action="Index" asp-controller="Home" asp-route-sort=@($"last_name{ViewBag.NewSort}")>Last Name @Html.Raw(Utils.GetSimbolSort("last_name", ViewBag.Sort))</a></th>
+                <th><a asp-action="Index" asp-controller="Home" asp-route-sort=@($"bithday{ViewBag.NewSort}")>Date Of Birth @Html.Raw(Utils.GetSimbolSort("bithday", ViewBag.Sort))</a></th>
+                <th><a asp-action="Index" asp-controller="Home" asp-route-sort=@($"country{ViewBag.NewSort}")>Country @Html.Raw(Utils.GetSimbolSort("country", ViewBag.Sort))</a></th>
+                <th><a asp-action="Index" asp-controller="Home" asp-route-sort=@($"driving_experience{ViewBag.NewSort}")>Driving Experience @Html.Raw(Utils.GetSimbolSort("driving_experience", ViewBag.Sort))</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int i = 1; }
+                @foreach (table_sort.Models.Person row in Model)
+                {
+                <tr>
+                    <td>@i</td>
+                    <td>@row.FirstName</td>
+                    <td>@row.LastName</td>
+                    <td>@row.DateOfBirth.ToString("dd.MM.yyyy")</td>
+                    <td>@row.Country</td>
+                    <td>@row.DrivingExperience</td>
+                </tr>
+                    i += 1;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5" class="text-end">Total:</td>
+                    <td class="text-start">
+                        @Model.Count().ToString()
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using dropdownlist.Models;
+@model ViewLand;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <h1>Selecting data using a dropdown list</h1>
+            <form asp-action="Select" method="post">
+                <div class="form-group">
+                    <label>Land:</label>
+                    <select name="Country" asp-items=@ViewBag.Land class="form-control" onchange="this.form.submit();" asp-for="idLand"></select>
+                </div>
+            </form>
+            <h2>Citys</h2>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">Num</th>
+                        <th class="text-left">City</th>
+                        <th class="text-right">Population</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int i = 0; }
+                    @foreach (var city in Model.citys)
+                    {
+                        i += 1;
+                        <tr>
+                            <td class="text-left">@i</td>
+                            <td class="text-left">@city.nm</td>
+                            <td class="text-right">@city.PopulationSize.ToString("N0")</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-right">Total Population:</td>
+                        <td class="text-right">
+                            @Model.citys.Sum(x => x.PopulationSize).ToString("N0")
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatePicker", "DatePicker\DatePicker.csproj", "{76DCDD69-D65C-4F86-B3CD-A3D61205ADD9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76DCDD69-D65C-4F86-B3CD-A3D61205ADD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76DCDD69-D65C-4F86-B3CD-A3D61205ADD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76DCDD69-D65C-4F86-B3CD-A3D61205ADD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76DCDD69-D65C-4F86-B3CD-A3D61205ADD9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6C80BAD9-B0A8-413C-9797-93BE9F5BE85F}
+	EndGlobalSection
+EndGlobal

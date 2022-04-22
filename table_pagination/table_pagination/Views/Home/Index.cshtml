@@ -1,0 +1,107 @@
+﻿@using table_pagination.Models;
+@using table_pagination.Controllers;
+@model List<table_pagination.Models.Person>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
+    <title>Persons</title>
+    <style>
+        caption {
+            caption-side: top;
+        }
+    </style>
+</head>
+<body>
+    <div class="m-1 p-1">
+        <h2>List of Persons</h2>
+        <table class="table table-bordered">
+            @if (ViewBag.PageInfo != null)
+            {
+                var items = (ViewBag.PageInfo as PagingInfo).TotalItems.ToString();
+                <caption class="caption">Total Persons: @items</caption>
+            }
+            <thead class="table-primary">
+                <tr><th>№</th><th>First Name</th><th>Last Name</th><th>Date Of Birth</th><th>Country</th><th>Driving Experience</th></tr>
+            </thead>
+            <tbody>
+                @{
+                    int num_row = 1;
+                    if (ViewBag.PageInfo != null)
+                    {
+                        num_row = ((PagingInfo)ViewBag.PageInfo).ItemsPerPage * (((PagingInfo)ViewBag.PageInfo).CurrentPage - 1) + 1;
+                    }
+                }
+                @foreach (table_pagination.Models.Person row in Model)
+                {
+                    <tr>
+                        <td>@num_row</td>
+                        <td>@row.FirstName</td>
+                        <td>@row.LastName</td>
+                        <td>@row.DateOfBirth.ToString("dd.MM.yyyy")</td>
+                        <td>@row.Country</td>
+                        <td>@row.DrivingExperience</td>
+                    </tr>
+                    num_row += 1;
+                }
+            </tbody>
+            @if (ViewBag.PageInfo != null)
+            {
+                <tfoot>
+                    <tr>
+                        <td colspan="5">
+                            Number of records per page:
+                            <div class="btn-group pull-right m-1">
+                                @if (HomeController.PageSize == 3)
+                                {
+                                    <a class="btn-primary btn" asp-action="Index" asp-controller="Home" asp-route-pageSize="3">3</a>
+                                }
+                                else
+                                {
+                                    <a class="btn-secondary btn" asp-action="Index" asp-controller="Home" asp-route-pageSize="3">3</a>
+                                }
+                                @if (HomeController.PageSize == 5)
+                                {
+                                    <a class="btn-primary btn" asp-action="Index" asp-controller="Home" asp-route-pageSize="5">5</a>
+                                }
+                                else
+                                {
+                                    <a class="btn-secondary btn" asp-action="Index" asp-controller="Home" asp-route-pageSize="5">5</a>
+                                }
+                                @if (HomeController.PageSize == 10)
+                                {
+                                    <a class="btn-primary btn" asp-action="Index" asp-controller="Home" asp-route-pageSize="10">10</a>
+                                }
+                                else
+                                {
+                                    <a class="btn-secondary btn" asp-action="Index" asp-controller="Home" asp-route-pageSize="10">10</a>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            Page:
+                            <div class="btn-group pull-right m-1">
+                                @{
+                                    PagingInfo p = (PagingInfo)ViewBag.PageInfo;
+                                    for (int e = 1; e <= p.TotalPages; e++)
+                                    {
+                                        if (e == p.CurrentPage)
+                                        {
+                                            <a class="btn-primary btn" asp-action="Index" asp-controller="Home" asp-route-elementPage="@e">@e</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn-secondary btn" asp-action="Index" asp-controller="Home" asp-route-elementPage="@e">@e</a>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            }
+            </table>
+    </div>
+</body>
+</html>

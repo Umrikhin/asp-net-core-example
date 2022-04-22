@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Upload Files</title>
+    <script src="~/jquery/dist/jquery.js"></script>
+    <script src="~/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+</head>
+<body>
+    <form id="FileUploadForm" asp-action="Upload" asp-controller="Home"
+          method="post" enctype="multipart/form-data">
+        <input id="uploadfile" name="uploadfile" type="file" />
+        <button name="uploadbtn" type="submit">Upload</button>
+        <img id="progress" src="~/images/Loader.gif" height="20" width="20" style="vertical-align:bottom;" />
+    </form>
+    <br>
+    <span id="ret_result"></span>
+    <script>
+        $("#progress").hide(); $("#ret_result").html('');
+        $(function () {
+            $("#uploadfile").change(function () {
+
+                //because this is single file upload I use only first index
+                var f = this.files[0]
+
+                //here I CHECK if the FILE SIZE is bigger than 1 MB (numbers below are in bytes)
+                if (f.size > 1048576 || f.fileSize > 1048576) {
+                    //show an alert to the user
+                    alert("Allowed file size exceeded. (Max. 1 MB)")
+
+                    //reset file upload control
+                    this.value = null;
+                }
+            })
+        });
+        $(function () {
+            $("#FileUploadForm").submit(function (e) {
+                e.preventDefault();
+
+                console.log('Doing ajax submit');
+                $("#progress").show();
+                $("#ret_result").html('');
+
+                var formAction = $(this).attr("action");
+                var fdata = new FormData();
+
+                var fileInput = $('#uploadfile')[0];
+                var file = fileInput.files[0];
+                fdata.append("file", file);
+
+                $.ajax({
+                    type: 'post',
+                    url: formAction,
+                    data: fdata,
+                    processData: false,
+                    contentType: false
+                }).done(function (result) {
+                    // do something with the result now
+                    console.log(result);
+                    $("#progress").hide();
+                    if (result.status === "success") {
+                        $("#ret_result").html(result.url);
+                    } else {
+                        $("#ret_result").html('<b style="color:red;">'+result.message+'</b>');
+                    }
+                });
+            });
+        })
+    </script>
+</body>
+</html>

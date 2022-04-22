@@ -1,0 +1,72 @@
+﻿@model List<crud_simple.Models.Apartment>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css" />
+    <title>Apartments</title>
+    <style>
+        .grid_action {
+            width: 250px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <div class="m-1 p-1">
+        <a class="btn btn-primary" asp-action="AddApartment" asp-controller="Home">+ Add</a>
+        <hr />
+        <h2>Here is a list of apartments for sale</h2>
+        @if (TempData["messageInfo"] != null)
+        {
+            <div class="alert alert-info mt-1">@TempData["messageInfo"]</div>
+        }
+        @if (TempData["messageErr"] != null)
+        {
+            <div class="alert alert-warning mt-1">@TempData["messageErr"]</div>
+        }
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr><th>№</th><th>Number Of Rooms</th><th>Space</th><th>Level</th><th>Number Of Storeys</th><th>Adres</th><th>Price</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                @{int i = 1;}
+                @foreach (crud_simple.Models.Apartment a in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@a.NumberOfRooms</td>
+                        <td>@a.Space.ToString("#0.00")</td>
+                        <td>@a.Level</td>
+                        <td>@a.NumberOfStoreys</td>
+                        <td>@a.Adres</td>
+                        <td>@a.Price.ToString("c")</td>
+                        <td>
+                            <div class="grid_action">
+                                <a class="btn btn-sm btn-warning" asp-action="EditApartment" asp-controller="Home" asp-route-id="@a.ID">Edit</a>&nbsp
+                                <form asp-controller="Home" asp-action="DeleteApartment" method="post">
+                                    <input type="hidden" name="apartmentId" value="@a.ID" />
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to remove this item?');">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    i += 1;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7" class="text-right">Total:</td>
+                    <td class="text-right">
+                        @Model.Count().ToString()
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</body>
+</html>

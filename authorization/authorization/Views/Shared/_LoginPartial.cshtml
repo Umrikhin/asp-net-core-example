@@ -1,0 +1,19 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<ul class="navbar-nav">
+    @if (HttpContextAccessor.HttpContext.Session.GetString("User") != null)
+    {
+        <li class="nav-item">
+            <form class="form-inline" asp-action="Logout" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Exit</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-action="Login">Login</a>
+        </li>
+    }
+</ul>

@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Timer Update</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+</head>
+<body>
+    <div class="m-1 p-1">
+        <h2>Here is a list of alets</h2>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr><th>№</th><th>Message</th><th>Time</th><th>Action</th></tr>
+            </thead>
+            <tbody class="tbody">
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-right">Total:</td>
+                    <td class="text-right total">
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <script>
+        let timerId = setInterval(loadData, 20000);
+        function loadData() {
+            $.ajax({
+                url: "/Home/List",
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = ''; var i = 1;
+                    var options = {
+                        year: 'numeric', month: 'numeric', day: 'numeric',
+                        hour: 'numeric', minute: 'numeric', second: 'numeric',
+                        hour12: false
+                    };
+                    $.each(result, function (key, item) {
+                        html += '<tr>';
+                        html += '<td>' + (i++).toString() + '</td>';
+                        html += '<td>' + item.msg + '</td>';
+                        html += '<td>' + (new Date(item.timeRun)).toLocaleString('ru', options) + '</td>';
+                        html += '<td>' + (new Date(item.timeRun) < new Date() ? 'Done' : 'Progress') + '</td>';
+                        html += '</tr>';
+                    });
+                    $('.tbody').html(html);
+                    $('.total').html((--i).toString());
+                },
+                error: function (errormessage) {
+                    clearInterval(timerId);
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        $(document).ready(function () {
+            loadData();
+        });
+    </script>
+</body>
+</html>
