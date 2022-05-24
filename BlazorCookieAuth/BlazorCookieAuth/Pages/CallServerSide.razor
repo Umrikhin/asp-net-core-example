@@ -4,15 +4,14 @@
 @inject HttpClient Http
 @inject NavigationManager UriHelper
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-<h3>Call Server Side</h3>
-<p>Current User: @CurrentUser.UserName</p>
-<p>IsAuthenticated: @CurrentUser.IsAuthenticated</p>
+<h3>Вызовы на стороне сервера</h3>
+<p>Текущий пользователь: @CurrentUser.UserName</p>
+<p>Аутентифицирован: @CurrentUser.IsAuthenticated</p>
 <button class="btn btn-primary" @onclick="GetUser">Get User</button>
 @code {
     UserModel CurrentUser = new UserModel();
     async Task GetUser()
     {
-        // Код предоставлен Oqtane.org (@sbwalker)
         // Мы должны передавать cookie аутентификации в запросах на стороне сервера
         var authToken = HttpContextAccessor.HttpContext?.Request.Cookies[".AspNetCore.Cookies"];
         if (authToken != null)
